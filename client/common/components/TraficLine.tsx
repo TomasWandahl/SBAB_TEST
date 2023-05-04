@@ -11,8 +11,8 @@ const TraficLine = ({line}:Line) => {
     }
 
     return (
-        <div className='TraficLine'>
-            <div className="TraficLineHeader" onClick={handleClick}>
+        <div className='TraficLine' onClick={handleClick}>
+            <div className="TraficLineHeader">
                 <div>
                     <h4><FontAwesomeIcon className="fa_icon" icon={faBus} />Linje {line.line}</h4>
                     {line.numberOfStops} hållplatser 
