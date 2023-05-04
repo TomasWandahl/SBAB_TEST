@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import TraficLine from "./TraficLine";
 
-interface PropType {
-    lines: Array<Line>,
-    statuscode: number
+interface TraficLinesProp {
+    lines: Line[]
 }
 
-const TraficLines = (props: PropType) => {
-    const [lines, setLines] = useState<Array<Line>>([])
+const TraficLines = ({traficLines}: TraficLinesProp) => {
+    const [lines, setLines] = useState<Line[]>([])
 
     useEffect(() => {
-        setLines(props.data.lines);
+        setLines(traficLines);
     }, [])
 
     return (

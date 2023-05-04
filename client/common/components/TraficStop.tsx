@@ -1,4 +1,4 @@
-const TraficStop = ({stop} : String) => {
+const TraficStop = ({stop} : {stop: String}) => {
     return (
         <li>{stop}</li>
     )

@@ -3,7 +3,7 @@ import Header from "@/common/components/Header";
 import { useEffect, useState } from "react";
 
 
-export default function Home() {
+const Home = () => {
   const [data, setData] = useState({statuscode: 0, lines: []})
   const [isLoading, setLoading] = useState(false)
 
@@ -12,7 +12,7 @@ export default function Home() {
     fetch('http://localhost:1337/api/trafik')
     .then((res) => res.json())
     .then((json_data) => {
-      setData(json_data)
+      setData(json_data.lines)
       setLoading(false)
     })
   }, [])
@@ -21,8 +21,10 @@ export default function Home() {
     <div className="app">
       <Header></Header>
       <div className="MainContent">
-        {!isLoading && <TraficLines data={data}></TraficLines>}
+        {!isLoading && <TraficLines traficLines={data}></TraficLines>}
       </div>
     </div>
   )
 }
+
+export default Home;

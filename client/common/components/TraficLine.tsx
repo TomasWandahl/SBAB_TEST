@@ -1,20 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBus, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-
 import TraficStop from '@/common/components/TraficStop'
-
-let windowWidth = 1000;
-
 
 const TraficLine = ({line}:Line) => {
     const [showStops, setShowStops] = useState(false);
-
-    useEffect(() => {
-        windowWidth = window.innerWidth;
-        console.log(windowWidth);
-        
-    }, [window.innerWidth])
 
     const handleClick = () => {
         setShowStops(!showStops);  
@@ -30,9 +20,7 @@ const TraficLine = ({line}:Line) => {
                 <div className="CollapseToggle"><FontAwesomeIcon icon={showStops ? faChevronUp : faChevronDown} /></div>
             </div>
             {showStops && <ul className="TraficStops">
-                {line.stops.map((stop) => {
-                    return <TraficStop stop={stop}></TraficStop>
-                })}
+                {line.stops.map((stop) => <TraficStop stop={stop}></TraficStop>)}
             </ul>
             }
         </div>
