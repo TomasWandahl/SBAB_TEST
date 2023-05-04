@@ -2,44 +2,35 @@ const express = require('express');
 require('dotenv').config();
 var cors = require('cors')
 const fs = require('fs');
+const fetch = require("node-fetch");
+
+const TRAFIK_LAB_MODEL = {
+        LINE: 'JourneyPatternPointOnLine',
+        STOPS: 'StopPoint'
+}
 
 const PORT = process.env.PORT_NUMBER || 1337;
 const API_ENDPOINT = '/api/trafik';
-const TRAFIKLAB_MODEL = 'JourneyPatternPointOnLine';
-const TRAFIC_STOPS_URL = `https://api.sl.se/api2/LineData.json?model=${TRAFIKLAB_MODEL}&key=${process.env.TRAFIKLAB_API_KEY}`;
+const TRAFIKLAB_TRANSPORT_MODE_CODE = 'BUS';
+const TRAFIC_LAB_LINES_URL = `https://api.sl.se/api2/LineData.json?model=${TRAFIK_LAB_MODEL.LINE}&key=${process.env.TRAFIKLAB_API_KEY}&DefaultTransportModeCode=${TRAFIKLAB_TRANSPORT_MODE_CODE}`;
+const TRAFIC_LAB_STOPS_URL = `https://api.sl.se/api2/LineData.json?model=${TRAFIK_LAB_MODEL.STOPS}&key=${process.env.TRAFIKLAB_API_KEY}&DefaultTransportModeCode=${TRAFIKLAB_TRANSPORT_MODE_CODE}`;
 
 
 
 const app = express();
 app.use(cors());
 
-function groupBy(list, keyGetter) {
-        const map = new Map();
-        list.forEach((item) => {
-             const key = keyGetter(item);
-             const collection = map.get(key);
-             if (!collection) {
-                 map.set(key, [item]);
-             } else {
-                 collection.push(item);
-             }
-        });
-        return map;
-    }
-
 const fetch_data = async () => {
-        //api_response = await fetch('./data.json');
-        //const json_data = await api_response.json();
+        const line_data = await fetch(TRAFIC_LAB_LINES_URL);
+        const line_data_json = await line_data.json();
 
-        const line_data = fs.readFileSync('./server/data.json');
-        const local_line_data = JSON.parse(line_data).ResponseData.Result;
 
-        const stoppoint_data = fs.readFileSync('./server/stoppoints.json');
-        const local_stoppoint_data = JSON.parse(stoppoint_data).ResponseData.Result;
+        const stop_point_data = await fetch(TRAFIC_LAB_STOPS_URL);
+        const stop_point_data_json = await stop_point_data.json();
 
         const stoppoint_map = new Map();
 
-        local_stoppoint_data.forEach(sp => {
+        stop_point_data_json.ResponseData.Result.forEach(sp => {
                 const key = sp.StopPointNumber;
                 collection = stoppoint_map.get(key);
 
@@ -47,10 +38,8 @@ const fetch_data = async () => {
 
         })
 
-
         const line_map = new Map();
-
-        local_line_data.forEach(stopPoint => {
+        line_data_json.ResponseData.Result.forEach(stopPoint => {
                 const key = stopPoint.LineNumber;
                 const collection = line_map.get(key);
                 const item = stopPoint.JourneyPatternPointNumber;
@@ -60,21 +49,17 @@ const fetch_data = async () => {
                 if (!collection) {
                         line_map.set(key, [item]);
                     } else {
-                        if(!collection.includes(item)) {
-                                collection.push(item);
-                        } 
+                        if(!collection.includes(item)) collection.push(item);             
                 }
         });
 
         const readable_map = new Map();
-
         line_map.forEach((line, key) => {
                 readable_map.set(key, []);
                 line.forEach(stop_id => {
                         const collection = readable_map.get(key);
                         const stop_name = stoppoint_map.get(stop_id);
-                        if((!collection.includes(stop_name)) && stop_name !== undefined)
-                                collection.push(stop_name);
+                        if((!collection.includes(stop_name)) && stop_name !== undefined) collection.push(stop_name);
                 })
         });
 
@@ -94,7 +79,7 @@ const fetch_data = async () => {
 }
 
 app.get(API_ENDPOINT, (req, res) => {
-        fetch_data().then(lines => res.json({statuscode: 0, lines}))
+        fetch_data().then(lines => res.json({statuscode: 200, lines}))
 })
 
 app.listen(PORT, () => {
