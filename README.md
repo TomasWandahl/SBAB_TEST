@@ -16,7 +16,7 @@ $ npm install
 $ npm run dev
 ```
 
-Copy the contents of .env.example to .env and enter your API_KEY
+Copy the contents of .env.example to .env and fill in your API Key provided by https://www.trafiklab.se/
 
 ### Frontend
 To run the Frontend Client, install it locally using npm:
