@@ -1,4 +1,5 @@
 import TraficLines from "@/common/components/TraficLines";
+import LoadIndicator from "@/common/components/LoadIndicator";
 import Header from "@/common/components/Header";
 import { useEffect, useState } from "react";
 
@@ -21,7 +22,7 @@ const Home = () => {
     <div className="app">
       <Header></Header>
       <div className="MainContent">
-        {!isLoading && <TraficLines traficLines={data}></TraficLines>}
+        {isLoading ? <LoadIndicator /> : <TraficLines traficLines={data}></TraficLines>}
       </div>
     </div>
   )
