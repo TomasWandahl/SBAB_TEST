@@ -1,6 +1,28 @@
 # SBAB_TEST
 
-1. Create .env-file and add your TRAFIKLAB_API_KEY
-2. Run npm install
-3. Run node run dev to start development server with nodemon
-4. Run node run start to start server in production mode
+## Table of contents
+* [General info](#general-info)
+* [Setup](#setup)
+
+## General info
+This project is a coding test provided for SBAB
+	
+## Setup
+### Backend
+To run the Backend Server, install it locally using npm:
+
+```
+$ npm install
+$ npm run dev
+```
+
+Copy the contents of .env.example to .env and enter your API_KEY
+
+### Frontend
+To run the Frontend Client, install it locally using npm:
+
+```
+$ cd client
+$ npm install
+$ npm run dev
+```
