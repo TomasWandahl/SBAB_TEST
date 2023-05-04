@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+var cors = require('cors')
 const fs = require('fs');
 
 const PORT = process.env.PORT_NUMBER || 1337;
@@ -10,6 +11,7 @@ const TRAFIC_STOPS_URL = `https://api.sl.se/api2/LineData.json?model=${TRAFIKLAB
 
 
 const app = express();
+app.use(cors());
 
 function groupBy(list, keyGetter) {
         const map = new Map();
@@ -92,10 +94,9 @@ const fetch_data = async () => {
 }
 
 app.get(API_ENDPOINT, (req, res) => {
-        fetch_data().then(result => res.json({statuscode: 0, result}))
+        fetch_data().then(lines => res.json({statuscode: 0, lines}))
 })
 
 app.listen(PORT, () => {
         console.log('Server is currently listening on port: ' + PORT);
-        console.log(TRAFIC_STOPS_URL);
 })

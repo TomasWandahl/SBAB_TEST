@@ -1,12 +1,28 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import TraficLines from "@/common/components/TraficLines";
+import Header from "@/common/components/Header";
+import { useEffect, useState } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [data, setData] = useState({statuscode: 0, lines: []})
+  const [isLoading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('http://localhost:1337/api/trafik')
+    .then((res) => res.json())
+    .then((json_data) => {
+      setData(json_data)
+      setLoading(false)
+    })
+  }, [])
+
   return (
     <div className="app">
-      <h1 className="main_header">Application</h1>
+      <Header></Header>
+      <div className="MainContent">
+        {!isLoading && <TraficLines data={data}></TraficLines>}
+      </div>
     </div>
   )
 }
