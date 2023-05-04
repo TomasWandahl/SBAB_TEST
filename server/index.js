@@ -21,12 +21,21 @@ const app = express();
 app.use(cors());
 
 const fetch_data = async () => {
-        const line_data = await fetch(TRAFIC_LAB_LINES_URL);
-        const line_data_json = await line_data.json();
+        let line_data_json;
+        let stop_point_data_json;
+
+        try {
+                const line_data = await fetch(TRAFIC_LAB_LINES_URL);
+                line_data_json = await line_data.json();
 
 
-        const stop_point_data = await fetch(TRAFIC_LAB_STOPS_URL);
-        const stop_point_data_json = await stop_point_data.json();
+                const stop_point_data = await fetch(TRAFIC_LAB_STOPS_URL);
+                stop_point_data_json = await stop_point_data.json();
+                
+        } catch (error) {
+                console.log(error);
+                throw(error);
+        }
 
         const stoppoint_map = new Map();
 
@@ -79,7 +88,11 @@ const fetch_data = async () => {
 }
 
 app.get(API_ENDPOINT, (req, res) => {
-        fetch_data().then(lines => res.json({statuscode: 200, lines}))
+        try {
+                fetch_data().then(lines => res.json({statuscode: 200, lines}));
+        } catch (error) {
+                res.json({statuscode: 500, error});
+        }
 })
 
 app.listen(PORT, () => {

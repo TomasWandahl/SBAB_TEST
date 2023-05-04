@@ -1,7 +1,7 @@
-const LoadIndicator = () => {
+const LoadIndicator = ({message} : {message : String}) => {
     return (
         <div className="LoadIndicatorWrapper">
-            <h1 className="LoadIndicator">Laddar data från TrafikLab</h1>
+            <h1 className="LoadIndicator">{message}</h1>
         </div>
     )
 }
