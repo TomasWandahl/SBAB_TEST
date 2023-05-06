@@ -27,13 +27,10 @@ const fetch_data = async () => {
         try {
                 const line_data = await fetch(TRAFIC_LAB_LINES_URL);
                 line_data_json = await line_data.json();
-
-
                 const stop_point_data = await fetch(TRAFIC_LAB_STOPS_URL);
                 stop_point_data_json = await stop_point_data.json();
                 
         } catch (error) {
-                console.log(error);
                 throw(error);
         }
 
@@ -51,9 +48,9 @@ const fetch_data = async () => {
         line_data_json.ResponseData.Result.forEach(stopPoint => {
                 const key = stopPoint.LineNumber;
                 const collection = line_map.get(key);
-                const item = stopPoint.JourneyPatternPointNumber;
+                let item = stopPoint.JourneyPatternPointNumber;
 
-                if(stoppoint_map.get(item) == undefined) return;
+                if(stoppoint_map.get(item) == undefined) item = 'Namn saknas';
 
                 if (!collection) {
                         line_map.set(key, [item]);
@@ -76,7 +73,7 @@ const fetch_data = async () => {
         line_map.forEach((line, key) => sortable_map.set(key, readable_map.get(key).length));
         const sorted_array = [...sortable_map.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
 
-        const new_array = sorted_array.map(line => {
+        const processed_array = sorted_array.map(line => {
                 return {
                         line: line[0],
                         numberOfStops: line[1],
@@ -84,7 +81,7 @@ const fetch_data = async () => {
                 }
         })
 
-        return new_array;
+        return processed_array;
 }
 
 app.get(API_ENDPOINT, (req, res) => {

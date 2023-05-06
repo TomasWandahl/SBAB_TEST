@@ -6,6 +6,7 @@
   --sbab-orange: #fe620eff;
   --background-color: #ffffffff;
   --card-background-color: #F1F1F3;
+  --header-height: 75px;
 }
 html, * {
   margin: 0;

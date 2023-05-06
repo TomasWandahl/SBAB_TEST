@@ -8,7 +8,6 @@ const LoadIndicatorMessages = {
   LOAD_ERROR: 'Ett fel uppstod när datan hämtades från servern'
 }
 
-
 const Home = () => {
   const [data, setData] = useState({statuscode: 0, lines: []})
   const [isLoading, setLoading] = useState(false);
