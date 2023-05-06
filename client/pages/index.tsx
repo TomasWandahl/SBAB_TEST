@@ -16,7 +16,7 @@ const Home = () => {
   useEffect(() => {
       setLoading(true);
 
-      fetch('http://localhost:1337/api/trafik')
+      fetch('http://localhost:1337/api/trafic')
       .then((res) => {
         if(!res.ok) {
           throw new Error(`${res.status} ${res.statusText}`, {cause: res});
