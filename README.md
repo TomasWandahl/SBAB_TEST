@@ -13,10 +13,11 @@ To run the Backend Server, install it locally using npm:
 
 ```
 $ npm install
+$ cp .env.example .env
 $ npm run dev
 ```
 
-Copy the contents of .env.example to .env and fill in your API Key provided by https://www.trafiklab.se/
+Insert your personal API-key into the .env-file.
 
 ### Frontend
 To run the Frontend Client, install it locally using npm:
